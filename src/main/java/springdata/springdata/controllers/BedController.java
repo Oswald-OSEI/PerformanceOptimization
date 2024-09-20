@@ -3,6 +3,7 @@ package springdata.springdata.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import springdata.springdata.config.GcStatsUtil;
 import springdata.springdata.dtos.BedDto;
 import springdata.springdata.services.BedService;
 import org.springframework.http.ResponseEntity;
@@ -13,13 +14,15 @@ import java.util.List;
 @RequestMapping("/bed")
 public class BedController {
     private BedService bedService;
-    public BedController(BedService bedService) {
+    private GcStatsUtil gcStatsUtil;
+    public BedController(BedService bedService, GcStatsUtil gcStatsUtil) {
         this.bedService = bedService;
+        this.gcStatsUtil = gcStatsUtil;
     }
 
     @PostMapping("/addBed")
     public ResponseEntity<BedDto> addBed(@RequestBody BedDto bedDto) throws Exception {
-        long startTime = System.currentTimeMillis(); // Capture the start time
+        long startTime = System.currentTimeMillis();// Capture the start time
         BedDto savedBed = bedService.addBed(bedDto);
         long endTime = System.currentTimeMillis(); // Capture the end time
         long timeTaken = endTime - startTime; // Calculate the time taken
@@ -67,5 +70,7 @@ public class BedController {
         System.out.println("Time taken to process updateBeds request: " + timeTaken + " ms");
         return ResponseEntity.ok().body(savedBed);
     }
+
+
 
 }

@@ -49,6 +49,7 @@ public class BedService {
         List<BedDto> bedDtos = beds.stream()
                 .map(this::convertToDto)
                 .toList();
+
         System.out.println(GcStatsUtil.getGcStats());
         return bedDtos;
     }
@@ -74,6 +75,7 @@ public class BedService {
             }
         }
         System.out.println(GcStatsUtil.getGcStats());
+
         return editedBedDto;
     }
 

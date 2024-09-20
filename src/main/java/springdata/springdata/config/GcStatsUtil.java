@@ -6,6 +6,28 @@ import java.util.List;
 
 @Service
 public class GcStatsUtil {
+    public long getGarbageCollectionTime() {
+        long gcTime = 0;
+        for (GarbageCollectorMXBean gcBean : ManagementFactory.getGarbageCollectorMXBeans()) {
+            gcTime += gcBean.getCollectionTime();
+        }
+        return gcTime;
+    }
+
+    public long getGarbageCollectionCount() {
+        long gcCount = 0;
+        for (GarbageCollectorMXBean gcBean : ManagementFactory.getGarbageCollectorMXBeans()) {
+            gcCount += gcBean.getCollectionCount();
+        }
+        return gcCount;
+    }
+
+    public long getMemoryUsage() {
+        MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+        return memoryBean.getHeapMemoryUsage().getUsed();
+    }
+
+
 
     public static String getGcStats() throws Exception {
         StringBuilder stats = new StringBuilder();
