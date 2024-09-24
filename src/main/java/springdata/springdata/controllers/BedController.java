@@ -31,11 +31,6 @@ public class BedController {
 
     }
 
-    @PostMapping("/addBedCustom")
-    public ResponseEntity<BedDto> addBedCustom(@RequestBody BedDto bedDto) {
-        BedDto savedBed = bedService.addBedCustomQuery(bedDto);
-        return ResponseEntity.ok().body(savedBed);
-    }
 
     @GetMapping("/allBeds")
     public ResponseEntity<List<BedDto>> getAllBeds() throws Exception {

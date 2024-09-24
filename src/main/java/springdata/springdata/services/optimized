@@ -26,9 +26,9 @@ public class BedService {
 
     @Transactional
     @CachePut(value = "bedCache", key = "#result.id")
-     public synchronized BedDto addBed(BedDto bedDto) throws Exception {
-            return convertToDto(bedRepository.save(convertToEntity(bedDto)));
-        }
+    public synchronized BedDto addBed(BedDto bedDto) throws Exception {
+        return convertToDto(bedRepository.save(convertToEntity(bedDto)));
+    }
 
 
 
@@ -43,14 +43,12 @@ public class BedService {
 
     @Cacheable(value = "bedCache", key = "'allregisteredBeds'")
     public List<BedDto> getAllBeds() throws Exception {
-        List<Bed> beds = bedRepository.findAll();
-        List<BedDto> bedDtos = beds.stream()
+        return  bedRepository.findAll()
+                .stream()
                 .map(this::convertToDto)
-                .toList();
-
-        System.out.println(GcStatsUtil.getGcStats());
-        return bedDtos;
+                .collect(Collectors.toList());
     }
+
 
     @Cacheable(value = "bedCache", unless = "#result==null")
     public BedDto getBedById(Long id) {
@@ -59,24 +57,24 @@ public class BedService {
 
     @Transactional
     @CachePut(value = "bedCache", key = "#bedDto.id")
-   public BedDto updateBed(BedDto bedDto) throws Exception {
-       BedDto editedBedDto = new BedDto();
-       if (bedDto.getId() != null) {
-           Optional<Bed> editBed = bedRepository.findById(bedDto.getId());
-           if (editBed.isPresent()) {
-               Bed bed = editBed.get();
-               synchronized (bed) {
-                   bed.setBedNumber(bedDto.getBedNumber());
-                   bed.setWard(bedDto.getWard());
-                   bedRepository.save(bed);
-               }
-               editedBedDto.setBedNumber(bedDto.getBedNumber());
-               editedBedDto.setWard(bedDto.getWard());
-           }
-       }
-       System.out.println(GcStatsUtil.getGcStats());
-       return editedBedDto;
-   }
+    public BedDto updateBed(BedDto bedDto) throws Exception {
+        BedDto editedBedDto = new BedDto();
+        if (bedDto.getId() != null) {
+            Optional<Bed> editBed = bedRepository.findById(bedDto.getId());
+            if (editBed.isPresent()) {
+                Bed bed = editBed.get();
+                synchronized (bed) {
+                    bed.setBedNumber(bedDto.getBedNumber());
+                    bed.setWard(bedDto.getWard());
+                    bedRepository.save(bed);
+                }
+                editedBedDto.setBedNumber(bedDto.getBedNumber());
+                editedBedDto.setWard(bedDto.getWard());
+            }
+        }
+        System.out.println(GcStatsUtil.getGcStats());
+        return editedBedDto;
+    }
 
 
     @CacheEvict(value = "bedCache", key = "#id")
