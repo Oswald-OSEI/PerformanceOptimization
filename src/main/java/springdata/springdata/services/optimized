@@ -43,13 +43,10 @@ public class BedService {
 
     @Cacheable(value = "bedCache", key = "'allregisteredBeds'")
     public List<BedDto> getAllBeds() throws Exception {
-        List<Bed> beds = bedRepository.findAll();
-        List<BedDto> bedDtos = beds.stream()
-                .map(this::convertToDto)
-                .toList();
-
-        System.out.println(GcStatsUtil.getGcStats());
-        return bedDtos;
+        return bedRepository.findAll()
+                            .stream()
+                            .map(this::convertToDto)
+                            .toList();
     }
 
     @Cacheable(value = "bedCache", unless = "#result==null")
